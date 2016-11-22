@@ -9,8 +9,16 @@ For template = "{{foo}}" and placeholders = [["foo","bar"]], the output should b
 fillTemplate(template, placeholders) = "bar".
 """
 
-def fillTemplate(template, placeholders):
-    for _ in placeholders:
-        for p in placeholders:
-            template = template.replace("{{"+p[0]+"}}",p[1])
-    return template
+def fillTemplate(t, p):
+    for a,b in p*10:
+        t = t.replace("{{"+a+"}}",b)
+    return t
+
+if __name__ == "__main__":
+    assert fillTemplate("{{foo}}", [["foo", "bar"]]) == "bar"
+    assert fillTemplate("Hello, {{foo}}", [["foo", "bar"]]) == "Hello, bar"
+    assert fillTemplate("Some {{ text with random {{stuff}} }} in it", [["stuff", "things"]]) == "Some {{ text with random things }} in it"
+    assert fillTemplate("{{nested {{placeholders}} oh noes!}}", [
+        ["nested placeholders! oh noes!", "nah is k"], ["placeholders", "placeholders!"]]) == "nah is k"
+    assert fillTemplate("As you might notice, the given {{template}} cannot be loaded properly", []) ==\
+            "As you might notice, the given {{template}} cannot be loaded properly"
